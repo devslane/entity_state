@@ -1,14 +1,146 @@
-# entity_state
+# Entity State
 
-A new Flutter package project.
+Entity State to manage records in your redux state.
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Dart
-[package](https://flutter.io/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+Add this to your project's pubspec.yaml
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+dependencies:
+  entity_state: ^1.0.1
+```
+
+## Usage
+
+In your redux state
+
+```
+abstract class ReminderState
+    with EntityState<Reminder, int, ReminderState, ReminderStateBuilder>
+    implements Built<ReminderState, ReminderStateBuilder> {
+  // This is mandatory to add
+  BuiltList<int> get ids;
+
+  // This is mandatory to add
+  BuiltMap<int, Reminder> get entities;
+
+  ReminderState._();
+
+  factory ReminderState([updates(ReminderStateBuilder b)]) = _$ReminderState;
+
+  static Serializer<ReminderState> get serializer => _$reminderStateSerializer;
+  
+  // This will tell the entity state what is the unique identifier of the model.
+  @override
+    int getId(Reminder data) {
+      return data.id;
+    }
+}
+```
+
+In your reducer
+
+### To Add One
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notification is `Notification`
+      .addOne(action.notification)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Add All (replaces any data that was previously present)
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notifications is `List<Notification>`
+      .addAll(action.notifications)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Add Many (appends to previous data)
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notifications is `List<Notification>`
+      .addMany(action.notifications)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Update One
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notification is `Notification`
+      .updateOne(action.notification)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Update Many
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notifications is `List<Notification>`
+      .updateMany(action.notifications)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Remove One
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notification is `int`
+      .removeOne(action.notificationId)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Remove Many
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notifications is `List<Notification>`
+      .removeMany(action.notifications)
+      .rebuild((b) => b..isLoading = false);
+}
+```
+
+### To Remove All
+
+```
+AppNotificationState listNotificationComplete(
+    AppNotificationState appNotificationState,
+    ListNotificationComplete action) {
+  return appNotificationState
+        // action.notifications is `List<Notification>`
+      .removeAll()
+      .rebuild((b) => b..isLoading = false);
+}
+```
