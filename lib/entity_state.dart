@@ -18,57 +18,51 @@ mixin EntityState<T, V, K, B> {
 
   K addOne(T data) {
     return rebuild((b) => b
-      ..ids = (ids.toBuilder()..add(getId(data))).build()
-      ..entities = (entities.toBuilder()
-            ..addAll(Map<V, T>.from({getId(data): data})))
-          .build());
+      ..ids = ids.toBuilder()
+      ..add(getId(data))
+      ..entities = entities.toBuilder()
+      ..addAll(Map<V, T>.from({getId(data): data})));
   }
 
   K addAll(List<T> data) {
     return rebuild((b) => b
-      ..ids = _getBuiltList(data).build()
-      ..entities = _getMapBuilder(data).build());
+      ..ids = _getBuiltList(data)
+      ..entities = _getMapBuilder(data));
   }
 
   K addMany(List<T> data) {
     return rebuild((b) => b
-      ..ids = (ids.toBuilder()..addAll(data.map((item) => getId(item)))).build()
-      ..entities = (entities.toBuilder()
-            ..addIterable(data,
-                key: (item) => getId(item), value: (item) => item))
-          .build());
+      ..ids = (ids.toBuilder()..addAll(data.map((item) => getId(item))))
+      ..entities = entities.toBuilder()
+      ..addIterable(data, key: (item) => getId(item), value: (item) => item));
   }
 
   K updateOne(T data) {
     return rebuild((b) => b
-      ..entities = (entities.toBuilder()
-            ..updateValue(getId(data), (data) => data))
-          .build());
+      ..entities = entities.toBuilder()
+      ..updateValue(getId(data), (data) => data));
   }
 
   K updateMany(List<T> data) {
     return rebuild((b) => b
-      ..entities = (entities.toBuilder()
-            ..addIterable(data,
-                key: (item) => getId(item), value: (item) => item))
-          .build());
+      ..entities = entities.toBuilder()
+      ..addIterable(data, key: (item) => getId(item), value: (item) => item));
   }
 
   K removeOne(V data) {
     return rebuild((b) => b
-      ..ids = (ids.toBuilder()..removeWhere((id) => id == data)).build()
-      ..entities = (entities.toBuilder()
-            ..removeWhere((V key, T value) => key == data))
-          .build());
+      ..ids = ids.toBuilder()
+      ..removeWhere((id) => id == data)
+      ..entities = entities.toBuilder()
+      ..removeWhere((V key, T value) => key == data));
   }
 
   K removeMany(List<V> data) {
     return rebuild((b) => b
-      ..ids =
-          (ids.toBuilder()..removeWhere((id) => data.indexOf(id) > -1)).build()
-      ..entities = (entities.toBuilder()
-            ..removeWhere((V key, T value) => data.indexOf(key) > -1))
-          .build());
+      ..ids = ids.toBuilder()
+      ..removeWhere((id) => data.indexOf(id) > -1)
+      ..entities = entities.toBuilder()
+      ..removeWhere((V key, T value) => data.indexOf(key) > -1));
   }
 
   K removeAll() {
