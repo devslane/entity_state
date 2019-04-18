@@ -11,7 +11,7 @@ mixin EntityState<T, V, K, B> {
   K rebuild(updates(B));
 
   V getId(T data) {
-    throw MethodNotOverridenError();
+    throw MethodGetIdNotOverridenError();
   }
 
   // Setter Methods
