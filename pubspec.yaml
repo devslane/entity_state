@@ -1,13 +1,13 @@
 name: entity_state
 description: Helper construct basic redux state in Flutter project.
 version: 1.0.0
-author: Kushagra Saxena
+author: Kushagra Saxena <saxena.kushagra3107@gmail.com>
 homepage: https://devslane.com
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  built_collection: any
+  built_collection: ^4.2.0
 
 dev_dependencies:
