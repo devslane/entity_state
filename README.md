@@ -144,3 +144,17 @@ AppNotificationState listNotificationComplete(
       .rebuild((b) => b..isLoading = false);
 }
 ```
+
+### How to get the data
+
+```
+static _ViewModel fromStore(Store<AppState> store) {
+       return _ViewModel(
+           notifications: store.state.appNotification.getAll(),
+           isLoading: store.state.appNotification.isLoading,
+           notificationTapped: (AppNotification notification) {
+             store.dispatch(UpdateNotification(notification: notification));
+           });
+     }
+```
+
