@@ -1,8 +1,8 @@
 name: entity_state
-description: A new Flutter package project.
-version: 0.0.1
-author:
-homepage:
+description: Helper construct basic redux state in Flutter project.
+version: 1.0.0
+author: Kushagra Saxena
+homepage: https://devslane.com
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
