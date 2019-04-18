@@ -23,4 +23,22 @@ abstract class EntityState<T, V, K, A>
   V getId() {
     throw MethodNotOverridenError();
   }
+
+  // Getter Methods
+
+  List<V> getIds() {
+    return ids.toList();
+  }
+
+  Map<V, T> getEntities() {
+    return entities.toMap();
+  }
+
+  List<T> getAll() {
+    return entities.values.toList();
+  }
+
+  int getCount() {
+    return ids.length;
+  }
 }
