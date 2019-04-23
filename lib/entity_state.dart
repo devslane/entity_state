@@ -17,7 +17,8 @@ mixin EntityState<T, V, K, B> {
   // Setter Methods
 
   K addOne(T data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = ids.toBuilder()
       ..add(getId(data))
       ..entities = entities.toBuilder()
@@ -25,32 +26,40 @@ mixin EntityState<T, V, K, B> {
   }
 
   K addAll(List<T> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = _getBuiltList(data)
       ..entities = _getMapBuilder(data));
   }
 
   K addMany(List<T> data) {
-    return rebuild((b) => b
-      ..ids = (ids.toBuilder()..addAll(data.map((item) => getId(item))))
+    return rebuild((b) =>
+    b
+      ..ids = (ids.toBuilder()
+        ..addAll(data.map((item) => getId(item))))
       ..entities = entities.toBuilder()
       ..addIterable(data, key: (item) => getId(item), value: (item) => item));
   }
 
   K updateOne(T data) {
-    return rebuild((b) => b
-      ..entities = entities.toBuilder()
-      ..updateValue(getId(data), (data) => data));
+    return rebuild((b) =>
+    b
+      ..entities = BuiltMap<V, T>.from(entities.toMap()
+        ..addAll({
+          getId(data): data
+        })).toBuilder());
   }
 
   K updateMany(List<T> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..entities = entities.toBuilder()
       ..addIterable(data, key: (item) => getId(item), value: (item) => item));
   }
 
   K removeOne(V data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = ids.toBuilder()
       ..removeWhere((id) => id == data)
       ..entities = entities.toBuilder()
@@ -58,7 +67,8 @@ mixin EntityState<T, V, K, B> {
   }
 
   K removeMany(List<V> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = ids.toBuilder()
       ..removeWhere((id) => data.indexOf(id) > -1)
       ..entities = entities.toBuilder()
@@ -66,7 +76,8 @@ mixin EntityState<T, V, K, B> {
   }
 
   K removeAll() {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = []
       ..entities = {});
   }
