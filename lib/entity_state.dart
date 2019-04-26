@@ -17,11 +17,12 @@ mixin EntityState<T, V, K, B> {
   // Setter Methods
 
   K addOne(T data) {
-    return rebuild((b) => b
-      ..ids = ids.toBuilder()
-      ..add(getId(data))
-      ..entities = entities.toBuilder()
-      ..addAll(Map<V, T>.from({getId(data): data})));
+    return rebuild((b) =>
+    b
+      ..ids = BuiltList<V>.from(ids.toList()
+        ..add(getId(data))).toBuilder()
+      ..entities = BuiltMap<V, T>.from(entities.toMap()
+        ..addAll({getId(data): data})).toBuilder());
   }
 
   K addAll(List<T> data) {
