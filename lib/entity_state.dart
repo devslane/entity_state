@@ -73,11 +73,14 @@ mixin EntityState<T, V, K, B> {
   ///
   /// Returns the newly object of the state using rebuild.
   K addOne(T data) {
-    return rebuild((b) => b
-      ..ids = BuiltList<V>.from(ids.toList()..add(getId(data))).toBuilder()
+    return rebuild((b) =>
+    b
+      ..ids = BuiltList<V>.from(ids.toList()
+        ..add(getId(data))).toBuilder()
       ..entities =
-          BuiltMap<V, T>.from(entities.toMap()..addAll({getId(data): data}))
-              .toBuilder());
+      BuiltMap<V, T>.from(entities.toMap()
+        ..addAll({getId(data): data}))
+          .toBuilder());
   }
 
   /// This replaces all the previous values of state with the new ones in [data].
@@ -93,7 +96,8 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K addAll(List<T> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = _getBuiltList(data)
       ..entities = _getMapBuilder(data));
   }
@@ -111,10 +115,15 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K addMany(List<T> data) {
-    return rebuild((b) => b
-      ..ids = (ids.toBuilder()..addAll(data.map((item) => getId(item))))
-      ..entities = entities.toBuilder()
-      ..addIterable(data, key: (item) => getId(item), value: (item) => item));
+    return rebuild((b) =>
+    b
+      ..ids = (ids.toBuilder()
+        ..addAll(data.map((item) => getId(item))))
+      ..entities = entities.rebuild((b) =>
+      b
+        ..addIterable(data, key: (item) => getId(item), value: (item) => item))
+          .toBuilder()
+    );
   }
 
   /// This is used to update one of the values already present in the [entities].
@@ -132,10 +141,12 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K updateOne(T data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..entities =
-          BuiltMap<V, T>.from(entities.toMap()..addAll({getId(data): data}))
-              .toBuilder());
+      BuiltMap<V, T>.from(entities.toMap()
+        ..addAll({getId(data): data}))
+          .toBuilder());
   }
 
   /// This updates all the values in [data] on [entities] that are present.
@@ -153,12 +164,13 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K updateMany(List<T> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..entities = BuiltMap<V, T>.from(entities.toMap()
-            ..updateAll((key, value) =>
-                data.map((d) => getId(d)).contains((d) => key)
-                    ? data.firstWhere((d) => getId(d) == key)
-                    : value))
+        ..updateAll((key, value) =>
+        data.map((d) => getId(d)).contains((d) => key)
+            ? data.firstWhere((d) => getId(d) == key)
+            : value))
           .toBuilder());
   }
 
@@ -177,12 +189,15 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K removeOne(V data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids =
-          BuiltList<V>.from(ids.toList()..removeWhere((elem) => elem == data))
-              .toBuilder()
+      BuiltList<V>.from(ids.toList()
+        ..removeWhere((elem) => elem == data))
+          .toBuilder()
       ..entities = BuiltMap<V, T>.from(
-              entities.toMap()..removeWhere((V key, T value) => key == data))
+          entities.toMap()
+            ..removeWhere((V key, T value) => key == data))
           .toBuilder());
   }
 
@@ -201,12 +216,14 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K removeMany(List<V> data) {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = BuiltList<V>.from(
-              ids.toList()..removeWhere((elem) => data.contains(elem)))
+          ids.toList()
+            ..removeWhere((elem) => data.contains(elem)))
           .toBuilder()
       ..entities = BuiltMap<V, T>.from(entities.toMap()
-            ..removeWhere((V key, T value) => data.contains(key)))
+        ..removeWhere((V key, T value) => data.contains(key)))
           .toBuilder());
   }
 
@@ -223,7 +240,8 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K removeAll() {
-    return rebuild((b) => b
+    return rebuild((b) =>
+    b
       ..ids = []
       ..entities = {});
   }
