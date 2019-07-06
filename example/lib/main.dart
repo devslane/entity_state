@@ -44,6 +44,7 @@ class HomePageContainer extends StatelessWidget {
             users: model.users,
             deletingIds: model.deletingIds,
             onDelete: model.onDelete,
+            onDeleteAll: model.onDeleteAll,
           ),
     );
   }
@@ -55,19 +56,25 @@ class _ViewModel {
   final Map<String, bool> deletingIds;
 
   final OnDelete onDelete;
+  final Function onDeleteAll;
 
   _ViewModel(
       {@required this.isLoading,
       @required this.users,
       @required this.onDelete,
-      @required this.deletingIds});
+      @required this.deletingIds,
+      @required this.onDeleteAll});
 
   static _ViewModel fromStore(Store<UserState> store) {
     return _ViewModel(
-        isLoading: store.state.isLoading,
-        users: store.state.getAll(),
-        onDelete: (String userId) => store.dispatch(DeleteUser(userId)),
-        deletingIds: store.state.deletingIds.toMap());
+      isLoading: store.state.isLoading,
+      users: store.state.getAll(),
+      onDelete: (String userId) => store.dispatch(DeleteUser(userId)),
+      deletingIds: store.state.deletingIds.toMap(),
+      onDeleteAll: () {
+        store.dispatch(DeleteAllUsers());
+      },
+    );
   }
 }
 
@@ -77,18 +84,26 @@ class MyHomePage extends StatelessWidget {
   final Map<String, bool> deletingIds;
 
   final OnDelete onDelete;
+  final Function onDeleteAll;
 
   MyHomePage(
       {@required this.isLoading,
       @required this.users,
       @required this.onDelete,
-      @required this.deletingIds});
+      @required this.deletingIds,
+      @required this.onDeleteAll});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Entity State"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Delete All"),
+            onPressed: onDeleteAll,
+          )
+        ],
       ),
       body: Center(
         child: isLoading

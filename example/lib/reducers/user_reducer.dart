@@ -9,6 +9,7 @@ Reducer<UserState> userReducer = combineReducers([
   TypedReducer<UserState, UpdateUserComplete>(updateComplete),
   TypedReducer<UserState, DeleteUser>(delete),
   TypedReducer<UserState, DeleteUserComplete>(deleteComplete),
+  TypedReducer<UserState, DeleteAllUsers>(deleteAll),
 ]);
 
 UserState list(UserState state, ListUsers action) {
@@ -45,4 +46,8 @@ UserState deleteComplete(UserState state, DeleteUserComplete action) {
     ..deletingIds = state.deletingIds
         .rebuild((b) => b..addAll({action.userId: false}))
         .toBuilder());
+}
+
+UserState deleteAll(UserState state, DeleteAllUsers action) {
+  return state.removeAll();
 }

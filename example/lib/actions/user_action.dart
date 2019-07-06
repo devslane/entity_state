@@ -31,3 +31,5 @@ class DeleteUserComplete {
 
   DeleteUserComplete(this.userId);
 }
+
+class DeleteAllUsers {}
