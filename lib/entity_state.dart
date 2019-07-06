@@ -242,8 +242,8 @@ mixin EntityState<T, V, K, B> {
   K removeAll() {
     return rebuild((b) =>
     b
-      ..ids = []
-      ..entities = {});
+      ..ids = BuiltList<V>.from([]).toBuilder()
+      ..entities = BuiltMap<V, T>.from({}).toBuilder());
   }
 
   /// Getter Methods. These methods are useful when getting values from the state.
