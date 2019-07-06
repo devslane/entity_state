@@ -29,9 +29,14 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
       'isLoading',
       serializers.serialize(object.isLoading,
           specifiedType: const FullType(bool)),
-      'isUpdating',
-      serializers.serialize(object.isUpdating,
-          specifiedType: const FullType(bool)),
+      'deletingIds',
+      serializers.serialize(object.deletingIds,
+          specifiedType: const FullType(
+              BuiltMap, const [const FullType(String), const FullType(bool)])),
+      'updatingIds',
+      serializers.serialize(object.updatingIds,
+          specifiedType: const FullType(
+              BuiltMap, const [const FullType(String), const FullType(bool)])),
     ];
 
     return result;
@@ -65,9 +70,19 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
           result.isLoading = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
-        case 'isUpdating':
-          result.isUpdating = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+        case 'deletingIds':
+          result.deletingIds.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(bool)
+              ])) as BuiltMap);
+          break;
+        case 'updatingIds':
+          result.updatingIds.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(bool)
+              ])) as BuiltMap);
           break;
       }
     }
@@ -84,12 +99,19 @@ class _$UserState extends UserState {
   @override
   final bool isLoading;
   @override
-  final bool isUpdating;
+  final BuiltMap<String, bool> deletingIds;
+  @override
+  final BuiltMap<String, bool> updatingIds;
 
   factory _$UserState([void Function(UserStateBuilder) updates]) =>
       (new UserStateBuilder()..update(updates)).build();
 
-  _$UserState._({this.ids, this.entities, this.isLoading, this.isUpdating})
+  _$UserState._(
+      {this.ids,
+      this.entities,
+      this.isLoading,
+      this.deletingIds,
+      this.updatingIds})
       : super._() {
     if (ids == null) {
       throw new BuiltValueNullFieldError('UserState', 'ids');
@@ -100,8 +122,11 @@ class _$UserState extends UserState {
     if (isLoading == null) {
       throw new BuiltValueNullFieldError('UserState', 'isLoading');
     }
-    if (isUpdating == null) {
-      throw new BuiltValueNullFieldError('UserState', 'isUpdating');
+    if (deletingIds == null) {
+      throw new BuiltValueNullFieldError('UserState', 'deletingIds');
+    }
+    if (updatingIds == null) {
+      throw new BuiltValueNullFieldError('UserState', 'updatingIds');
     }
   }
 
@@ -119,14 +144,18 @@ class _$UserState extends UserState {
         ids == other.ids &&
         entities == other.entities &&
         isLoading == other.isLoading &&
-        isUpdating == other.isUpdating;
+        deletingIds == other.deletingIds &&
+        updatingIds == other.updatingIds;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, ids.hashCode), entities.hashCode), isLoading.hashCode),
-        isUpdating.hashCode));
+        $jc(
+            $jc($jc($jc(0, ids.hashCode), entities.hashCode),
+                isLoading.hashCode),
+            deletingIds.hashCode),
+        updatingIds.hashCode));
   }
 
   @override
@@ -135,7 +164,8 @@ class _$UserState extends UserState {
           ..add('ids', ids)
           ..add('entities', entities)
           ..add('isLoading', isLoading)
-          ..add('isUpdating', isUpdating))
+          ..add('deletingIds', deletingIds)
+          ..add('updatingIds', updatingIds))
         .toString();
   }
 }
@@ -157,9 +187,17 @@ class UserStateBuilder implements Builder<UserState, UserStateBuilder> {
   bool get isLoading => _$this._isLoading;
   set isLoading(bool isLoading) => _$this._isLoading = isLoading;
 
-  bool _isUpdating;
-  bool get isUpdating => _$this._isUpdating;
-  set isUpdating(bool isUpdating) => _$this._isUpdating = isUpdating;
+  MapBuilder<String, bool> _deletingIds;
+  MapBuilder<String, bool> get deletingIds =>
+      _$this._deletingIds ??= new MapBuilder<String, bool>();
+  set deletingIds(MapBuilder<String, bool> deletingIds) =>
+      _$this._deletingIds = deletingIds;
+
+  MapBuilder<String, bool> _updatingIds;
+  MapBuilder<String, bool> get updatingIds =>
+      _$this._updatingIds ??= new MapBuilder<String, bool>();
+  set updatingIds(MapBuilder<String, bool> updatingIds) =>
+      _$this._updatingIds = updatingIds;
 
   UserStateBuilder();
 
@@ -168,7 +206,8 @@ class UserStateBuilder implements Builder<UserState, UserStateBuilder> {
       _ids = _$v.ids?.toBuilder();
       _entities = _$v.entities?.toBuilder();
       _isLoading = _$v.isLoading;
-      _isUpdating = _$v.isUpdating;
+      _deletingIds = _$v.deletingIds?.toBuilder();
+      _updatingIds = _$v.updatingIds?.toBuilder();
       _$v = null;
     }
     return this;
@@ -196,7 +235,8 @@ class UserStateBuilder implements Builder<UserState, UserStateBuilder> {
               ids: ids.build(),
               entities: entities.build(),
               isLoading: isLoading,
-              isUpdating: isUpdating);
+              deletingIds: deletingIds.build(),
+              updatingIds: updatingIds.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -204,6 +244,11 @@ class UserStateBuilder implements Builder<UserState, UserStateBuilder> {
         ids.build();
         _$failedField = 'entities';
         entities.build();
+
+        _$failedField = 'deletingIds';
+        deletingIds.build();
+        _$failedField = 'updatingIds';
+        updatingIds.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'UserState', _$failedField, e.toString());

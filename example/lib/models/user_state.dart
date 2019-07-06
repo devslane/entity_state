@@ -15,13 +15,16 @@ abstract class UserState
 
   bool get isLoading;
 
-  bool get isUpdating;
+  BuiltMap<String, bool> get deletingIds;
+
+  BuiltMap<String, bool> get updatingIds;
 
   static Serializer<UserState> get serializer => _$userStateSerializer;
 
   factory UserState() => _$UserState((b) => b
     ..isLoading = false
-    ..isUpdating = false);
+    ..deletingIds = BuiltMap<String, bool>().toBuilder()
+    ..updatingIds = BuiltMap<String, bool>().toBuilder());
 
   UserState._();
 

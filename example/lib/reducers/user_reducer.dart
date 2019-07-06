@@ -20,17 +20,29 @@ UserState listComplete(UserState state, ListUsersComplete action) {
 }
 
 UserState update(UserState state, UpdateUser action) {
-  return state.rebuild((b) => b..isUpdating = true);
+  return state.rebuild((b) => b
+    ..updatingIds = state.updatingIds
+        .rebuild((b) => b..addAll({action.user.id: true}))
+        .toBuilder());
 }
 
 UserState updateComplete(UserState state, UpdateUserComplete action) {
-  return state.updateOne(action.user).rebuild((b) => b..isUpdating = false);
+  return state.updateOne(action.user).rebuild((b) => b
+    ..updatingIds = state.updatingIds
+        .rebuild((b) => b..addAll({action.user.id: false}))
+        .toBuilder());
 }
 
 UserState delete(UserState state, DeleteUser action) {
-  return state.rebuild((b) => b..isUpdating = true);
+  return state.rebuild((b) => b
+    ..deletingIds = state.deletingIds
+        .rebuild((b) => b..addAll({action.userId: true}))
+        .toBuilder());
 }
 
 UserState deleteComplete(UserState state, DeleteUserComplete action) {
-  return state.removeOne(action.userId).rebuild((b) => b..isUpdating = false);
+  return state.removeOne(action.userId).rebuild((b) => b
+    ..deletingIds = state.deletingIds
+        .rebuild((b) => b..addAll({action.userId: false}))
+        .toBuilder());
 }

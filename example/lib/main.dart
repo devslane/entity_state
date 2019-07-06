@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+typedef OnDelete = void Function(String userId);
+typedef OnUpdate = void Function(User user);
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -39,6 +42,8 @@ class HomePageContainer extends StatelessWidget {
       builder: (BuildContext context, _ViewModel model) => MyHomePage(
             isLoading: model.isLoading,
             users: model.users,
+            deletingIds: model.deletingIds,
+            onDelete: model.onDelete,
           ),
     );
   }
@@ -47,20 +52,37 @@ class HomePageContainer extends StatelessWidget {
 class _ViewModel {
   final bool isLoading;
   final List<User> users;
+  final Map<String, bool> deletingIds;
 
-  _ViewModel({@required this.isLoading, @required this.users});
+  final OnDelete onDelete;
+
+  _ViewModel(
+      {@required this.isLoading,
+      @required this.users,
+      @required this.onDelete,
+      @required this.deletingIds});
 
   static _ViewModel fromStore(Store<UserState> store) {
     return _ViewModel(
-        isLoading: store.state.isLoading, users: store.state.getAll());
+        isLoading: store.state.isLoading,
+        users: store.state.getAll(),
+        onDelete: (String userId) => store.dispatch(DeleteUser(userId)),
+        deletingIds: store.state.deletingIds.toMap());
   }
 }
 
 class MyHomePage extends StatelessWidget {
   final bool isLoading;
   final List<User> users;
+  final Map<String, bool> deletingIds;
 
-  MyHomePage({@required this.isLoading, @required this.users});
+  final OnDelete onDelete;
+
+  MyHomePage(
+      {@required this.isLoading,
+      @required this.users,
+      @required this.onDelete,
+      @required this.deletingIds});
 
   @override
   Widget build(BuildContext context) {
@@ -74,20 +96,27 @@ class MyHomePage extends StatelessWidget {
             : ListView.builder(
                 itemCount: users.length,
                 itemBuilder: (BuildContext context, int index) {
+                  final user = users.elementAt(index);
                   return Card(
                     child: Container(
                       padding: EdgeInsets.all(12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(users.elementAt(index).fullName),
+                          Text(user.fullName),
                           FlatButton(
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
+                            child: (deletingIds[user.id] != null &&
+                                    deletingIds[user.id])
+                                ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.red),
+                                  )
+                                : Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
                             onPressed: () {
-                              //
+                              onDelete(user.id);
                             },
                           )
                         ],

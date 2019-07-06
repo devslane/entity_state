@@ -15,6 +15,17 @@ Future<Null> userMiddleware(
 
         break;
       }
+
+    case DeleteUser:
+      {
+        next(action);
+
+        Future.delayed(Duration(milliseconds: 1200), () {
+          store.dispatch(DeleteUserComplete(action.userId));
+        });
+
+        break;
+      }
     default:
       next(action);
   }
