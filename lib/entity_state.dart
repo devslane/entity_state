@@ -111,7 +111,7 @@ mixin EntityState<T, V, K, B> {
   ///}
   ///```
   K addMany(List<T> data) {
-    if (data == null || data.isEmpty) {
+    if (data == null || data.length < 1) {
       return rebuild((b) => b);
     }
 
