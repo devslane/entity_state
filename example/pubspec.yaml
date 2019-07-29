@@ -23,7 +23,8 @@ dependencies:
   redux: ^3.0.0
   flutter_redux: ^0.5.0
   path_provider: any
-  entity_state: ^1.0.5
+  entity_state: ^1.2.3
+  random_string: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

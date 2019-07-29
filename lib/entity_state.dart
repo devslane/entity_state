@@ -60,7 +60,7 @@ mixin EntityState<T, V, K, B> {
 
   /// This method must be overridden in the class without the call of super();
   ///
-  ///  Throws [MethodGetIdNotOverriddenError] exception if the method is called with super or is not overridden.
+  /// Throws [MethodGetIdNotOverriddenError] exception if the method is called with super or is not overridden.
   ///
   /// The method returns the unique identifier of the entity that will be make up the key in the `entities` map.
   V getId(T data) {
@@ -162,10 +162,7 @@ mixin EntityState<T, V, K, B> {
   K updateMany(List<T> data) {
     return rebuild((b) => b
       ..entities = BuiltMap<V, T>.from(entities.toMap()
-            ..updateAll((key, value) =>
-                data.map((d) => getId(d)).contains((d) => key)
-                    ? data.firstWhere((d) => getId(d) == key)
-                    : value))
+            ..addAll(data.fold({}, (a, b) => a..addAll({getId(b): b}))))
           .toBuilder());
   }
 
@@ -267,6 +264,10 @@ mixin EntityState<T, V, K, B> {
 
   /// Get all the values in the state as List.
   ///
+  /// In it Sorted List get as according to the order specified by the [sortComparer] function.
+  ///
+  /// If sortComparer is not given then it gives List of values.
+  ///
   /// Usage
   ///
   /// ```
@@ -275,7 +276,18 @@ mixin EntityState<T, V, K, B> {
   ///       notifications: store.state.appNotification.getAll());
   ///  }
   ///```
-  List<T> getAll() {
+  ///
+  ///```
+  ///static _ViewModel fromStore(Store<AppState> store) {
+  ///    return _ViewModel(
+  ///       notifications: store.state.appNotification.getAll((a, b) => a.id.compareTo(b.id));
+  ///    );
+  /// }
+  ///```
+  List<T> getAll([int sortComparer(T t1, T t2)]) {
+    if (sortComparer != null) {
+      return entities.values.toList()..sort(sortComparer);
+    }
     return entities.values.toList();
   }
 

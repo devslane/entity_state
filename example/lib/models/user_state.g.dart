@@ -15,7 +15,7 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
   final String wireName = 'UserState';
 
   @override
-  Iterable serialize(Serializers serializers, UserState object,
+  Iterable<Object> serialize(Serializers serializers, UserState object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'ids',
@@ -43,7 +43,7 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
   }
 
   @override
-  UserState deserialize(Serializers serializers, Iterable serialized,
+  UserState deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new UserStateBuilder();
 
@@ -57,14 +57,14 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
           result.ids.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'entities':
           result.entities.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(String),
                 const FullType(User)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
         case 'isLoading':
           result.isLoading = serializers.deserialize(value,
@@ -75,14 +75,14 @@ class _$UserStateSerializer implements StructuredSerializer<UserState> {
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(String),
                 const FullType(bool)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
         case 'updatingIds':
           result.updatingIds.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(String),
                 const FullType(bool)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
       }
     }

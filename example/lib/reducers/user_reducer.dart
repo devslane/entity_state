@@ -4,12 +4,15 @@ import 'package:redux/redux.dart';
 
 Reducer<UserState> userReducer = combineReducers([
   TypedReducer<UserState, ListUsers>(list),
+  TypedReducer<UserState, AddOneUser>(addOneUser),
   TypedReducer<UserState, ListUsersComplete>(listComplete),
   TypedReducer<UserState, UpdateUser>(update),
   TypedReducer<UserState, UpdateUserComplete>(updateComplete),
+  TypedReducer<UserState, UpdateManyUser>(updateMany),
   TypedReducer<UserState, DeleteUser>(delete),
   TypedReducer<UserState, DeleteUserComplete>(deleteComplete),
   TypedReducer<UserState, DeleteAllUsers>(deleteAll),
+  TypedReducer<UserState, DeleteManyUser>(deleteManyUser),
 ]);
 
 UserState list(UserState state, ListUsers action) {
@@ -17,7 +20,7 @@ UserState list(UserState state, ListUsers action) {
 }
 
 UserState listComplete(UserState state, ListUsersComplete action) {
-  return state.addAll(action.users).rebuild((b) => b..isLoading = false);
+  return state.addMany(action.users).rebuild((b) => b..isLoading = false);
 }
 
 UserState update(UserState state, UpdateUser action) {
@@ -50,4 +53,16 @@ UserState deleteComplete(UserState state, DeleteUserComplete action) {
 
 UserState deleteAll(UserState state, DeleteAllUsers action) {
   return state.removeAll();
+}
+
+UserState deleteManyUser(UserState state, DeleteManyUser action) {
+  return state.removeMany(action.users);
+}
+
+UserState addOneUser(UserState state, AddOneUser action) {
+  return state.addOne(action.user);
+}
+
+UserState updateMany(UserState state, UpdateManyUser action) {
+  return state.updateMany(action.users);
 }
