@@ -8,6 +8,11 @@ class ListUsersComplete {
   ListUsersComplete(this.users);
 }
 
+class AddOneUser{
+  final User user;
+  AddOneUser(this.user);
+}
+
 class UpdateUser {
   final User user;
 
@@ -20,6 +25,11 @@ class UpdateUserComplete {
   UpdateUserComplete(this.user);
 }
 
+class UpdateManyUser{
+  final List<User> users;
+  UpdateManyUser(this.users);
+}
+
 class DeleteUser {
   final String userId;
 
@@ -30,6 +40,11 @@ class DeleteUserComplete {
   final String userId;
 
   DeleteUserComplete(this.userId);
+}
+
+class DeleteManyUser{
+  final List<String> users;
+  DeleteManyUser(this.users);
 }
 
 class DeleteAllUsers {}

@@ -15,7 +15,23 @@ Future<Null> userMiddleware(
 
         break;
       }
+    case UpdateUser:{
+      next(action);
 
+      store.dispatch(
+          UpdateUserComplete(action.user));
+
+      break;
+    }
+    case UpdateManyUser:{
+      next(action);
+      break;
+    }
+    case AddOneUser:
+      {
+        next(action);
+        break;
+      }
     case DeleteUser:
       {
         next(action);
