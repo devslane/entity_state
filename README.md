@@ -158,3 +158,11 @@ static _ViewModel fromStore(Store<AppState> store) {
      }
 ```
 
+### How to get the sorted data
+```
+static _ViewModel fromStore(Store<AppState> store) {
+       return _ViewModel(
+           notifications: store.state.appNotification.getAll((notif1,notif2)=>notif1.id.compareTo(notif2.id),
+           });
+     }
+```
