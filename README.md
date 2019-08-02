@@ -8,7 +8,7 @@ Add this to your project's pubspec.yaml
 
 ```
 dependencies:
-  entity_state: ^1.2.1
+  entity_state: ^1.2.4
 ```
 
 ## Usage
