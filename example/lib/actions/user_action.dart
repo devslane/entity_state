@@ -13,6 +13,11 @@ class AddOneUser{
   AddOneUser(this.user);
 }
 
+class AddManyUser{
+  final List<User> users;
+  AddManyUser(this.users);
+}
+
 class UpdateUser {
   final User user;
 

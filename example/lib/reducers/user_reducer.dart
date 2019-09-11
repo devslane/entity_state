@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 Reducer<UserState> userReducer = combineReducers([
   TypedReducer<UserState, ListUsers>(list),
   TypedReducer<UserState, AddOneUser>(addOneUser),
+  TypedReducer<UserState, AddManyUser>(addManyUser),
   TypedReducer<UserState, ListUsersComplete>(listComplete),
   TypedReducer<UserState, UpdateUser>(update),
   TypedReducer<UserState, UpdateUserComplete>(updateComplete),
@@ -61,6 +62,11 @@ UserState deleteManyUser(UserState state, DeleteManyUser action) {
 
 UserState addOneUser(UserState state, AddOneUser action) {
   return state.addOne(action.user);
+}
+
+UserState addManyUser(UserState state, AddManyUser action){
+  return state.addMany(action.users);
+
 }
 
 UserState updateMany(UserState state, UpdateManyUser action) {
