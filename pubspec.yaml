@@ -1,7 +1,7 @@
 name: entity_state
 description: Helper construct basic redux state in Flutter project.
   It eases out the effort to use the redux state with basic CRUD operations.
-version: 1.2.4
+version: 1.2.5
 author: Kushagra Saxena <saxena.kushagra3107@gmail.com>
 homepage: https://devslane.com
 repository: https://github.com/devslane/entity_state
