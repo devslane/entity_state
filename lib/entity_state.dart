@@ -74,7 +74,7 @@ mixin EntityState<T, V, K, B> {
   /// Returns the newly object of the state using rebuild.
   K addOne(T data) {
     return rebuild((b) => b
-      ..ids = BuiltList<V>.from(ids.toList()..add(getId(data))).toBuilder()
+      ..ids = BuiltList<V>.from(ids.toSet()..add(getId(data))).toBuilder()
       ..entities =
           BuiltMap<V, T>.from(entities.toMap()..addAll({getId(data): data}))
               .toBuilder());
@@ -116,7 +116,9 @@ mixin EntityState<T, V, K, B> {
     }
 
     return rebuild((b) => b
-      ..ids = (ids.toBuilder()..addAll(data.map((item) => getId(item))))
+      ..ids = BuiltList<V>.from(
+              ids.toSet()..addAll(data.map((item) => getId(item))))
+          .toBuilder()
       ..entities = entities
           .rebuild((b) => b
             ..addIterable(data,

@@ -32,6 +32,11 @@ Future<Null> userMiddleware(
         next(action);
         break;
       }
+    case AddManyUser:
+      {
+        next(action);
+        break;
+      }
     case DeleteUser:
       {
         next(action);

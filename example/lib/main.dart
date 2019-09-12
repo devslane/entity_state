@@ -5,7 +5,6 @@ import 'package:example/models/user_state.dart';
 import 'package:example/reducers/user_reducer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:random_string/random_string.dart';
 import 'package:redux/redux.dart';
 
 typedef OnDelete = void Function(String userId);
@@ -31,7 +30,6 @@ class MyApp extends StatelessWidget {
         home: HomePageContainer(),
       ),
     );
-    ;
   }
 }
 
@@ -49,6 +47,7 @@ class HomePageContainer extends StatelessWidget {
         onDeleteMany: model.onDeleteMany,
         entities: model.entities,
         addOne: model.addOne,
+        addMany: model.addMany,
         ids: model.ids,
         updateOne: model.updateOne,
         updateMany: model.updateMany,
@@ -68,6 +67,7 @@ class _ViewModel {
   final Function onDeleteAll;
 
   final Function addOne;
+  final Function addMany;
   final Function updateOne;
   final Function updateMany;
   final Map<String, User> entities;
@@ -77,6 +77,7 @@ class _ViewModel {
       {@required this.entities,
       @required this.ids,
       @required this.addOne,
+      @required this.addMany,
       @required this.updateOne,
       @required this.updateMany,
       @required this.isLoading,
@@ -90,6 +91,7 @@ class _ViewModel {
     return _ViewModel(
       ids: store.state.getIds(),
       addOne: (user) => store.dispatch(AddOneUser(user)),
+      addMany: (users) => store.dispatch(AddManyUser(users)),
       updateOne: (user) => store.dispatch(UpdateUser(user)),
       updateMany: (users) => store.dispatch(UpdateManyUser(users)),
       entities: store.state.getEntities(),
@@ -115,6 +117,7 @@ class MyHomePage extends StatefulWidget {
   final Function onDeleteMany;
 
   final Function addOne;
+  final Function addMany;
   final Function updateOne;
   final Function updateMany;
 
@@ -125,6 +128,7 @@ class MyHomePage extends StatefulWidget {
       {@required this.entities,
       @required this.ids,
       @required this.addOne,
+      @required this.addMany,
       @required this.updateMany,
       @required this.updateOne,
       @required this.isLoading,
@@ -142,12 +146,26 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _textFieldController = TextEditingController();
   bool val = false;
   Map<String, User> selectedValues = new Map();
+  List<User> users = new List();
 
   @override
   Widget build(BuildContext context) {
+    users
+      ..add(new User((b) => b
+        ..firstName = "Mclean 1"
+        ..id = "5d20ecfc59cb1c0f2c386cee"));
+    users
+      ..add(new User((b) => b
+        ..firstName = "Terri 1"
+        ..id = "5d20ecfccbdf7fb08c86c798"));
+    users
+      ..add(new User((b) => b
+        ..firstName = "Sherrie 1"
+        ..id = "5d20ecfcd435256672973f26"));
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+//          widget.addMany(users);
           _addOneDialog(context);
         },
         child: Icon(Icons.add),
@@ -253,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('SAVE'),
                 onPressed: () {
                   User user = new User((b) => b
-                    ..id = randomAlphaNumeric(20)
+                    ..id = "5d20ecfccbdf7fb08c86c798"
                     ..firstName = _textFieldController.text);
                   widget.addOne(user);
                   Navigator.of(context).pop();
@@ -284,7 +302,8 @@ class _MyHomePageState extends State<MyHomePage> {
               FlatButton(
                 child: Text('UPDATE'),
                 onPressed: () {
-                  user=user.rebuild((b) => b..firstName = _textFieldController.text);
+                  user = user
+                      .rebuild((b) => b..firstName = _textFieldController.text);
                   widget.updateOne(user);
                   Navigator.of(context).pop();
                 },
